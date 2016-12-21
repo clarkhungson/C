@@ -1,7 +1,12 @@
-all: hello run
-hello: 2-hello.c 2-main.c
-	gcc -o 2-hello 2-hello.c 2-main.c
-run:
-	./2-hello
-clean:
-	rm --recursive --force 2-hello
+# makefile 1
+# hellomake: hellomake.c hellofunc.c
+#	gcc -o hellomake hellomake.c hellofunc.c# -I.
+
+# makefile 2
+CC=gcc
+CFLAGS=-I.
+hellomake: hellomake.o hellofunc.o
+	 $(CC) -o hellomake hellomake.o hellofunc.o $(CFLAGS)
+
+# makefile 3
+
