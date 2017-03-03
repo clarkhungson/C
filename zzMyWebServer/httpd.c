@@ -9,28 +9,35 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#define SERVER_ADDRESS "192.168.100.97"
-char webpage[] = 
+#define SERVER_ADDRESS "192.168.56.101"
+
+char webpage_header[] = 
 "HTTP/1.1 200 OK\r\n"
 "Content-Type: text/html; charset=UTF-8\r\n\r\n"
-"<!DOCTYPE html>\r\n"
-"<html><head><title>Clark's Webpage</title>\r\n"
-//"<style>body { background-color: #00FF00 }</style></head>\r\n"
-"<body background=\"back.jpg\">"
-"<body><center>"
-"<h1>Hello world! This is my webpage..</h1><hr></br></br>\r\n"
-"<marquee scrollamount=\"10\" behavior=\"alternate\"><img src=\"girl.jpg\"><br></marquee>"
-"<a href=\"https://www.youtube.com/watch?v=1F2fsep_Tn4&feature=share\">Tran Thuy Duong VTV4</a>"
-//"<head><link rel=\"icon\" type=\"image/ico\" href=\"bird.ico\"/> </head>"
-//"<iframe width=\"420\" height=\"315\" src=\"https://www.youtube.com/watch?v=3AtDnEC4zak\"> </iframe>"
-"<h2><i><b></br></br></br>Have a nice day! ^^</b></i></h2>"
-"</center></body></html>\r\n";
+"<!DOCTYPE html>\r\n";
+char webpage_body[1000];
+
+void do_file(char *path, char *str)
+{
+	FILE *fp;
+	fp = fopen(path, "r+");
+	int c;
+	int i = 0;
+	while((c = getc(fp)) != EOF)
+	{
+		str[i] = c;
+		i++;
+	}
+	str[i] = '\n';
+	fclose(fp);
+}
 
 int main(int argc, char *argv[])
 {
-	// File add cua server va client
+	// File sockaddr cua server va client
 	struct sockaddr_in server_addr, client_addr;
 	socklen_t sin_len = sizeof(client_addr);
+
 	// File descriptor cua server va client
 	int fd_server, fd_client;
 	char buf[2048];
@@ -44,6 +51,7 @@ int main(int argc, char *argv[])
 		perror("socket");
 		exit(1);
 	}
+
 	// Set option cho socket server
 	setsockopt(fd_server, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(int));
 
@@ -103,7 +111,13 @@ int main(int argc, char *argv[])
 				close(fdimg);
 			}
 			else 
-				write(fd_client, webpage, sizeof(webpage) - 1);
+			{
+				fdimg = open("main.html", O_RDONLY);
+				write(fd_client, webpage_header, sizeof(webpage_header) - 1);
+				// do_file("main.html", webpage_body);
+				// write(fd_client, webpage_body, sizeof(webpage_body) - 1);
+				sendfile(fd_client, fdimg, NULL, 1000);
+			}
 			close(fd_client);
 			printf("closing...\n");
 			exit(0);
