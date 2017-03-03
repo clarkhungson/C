@@ -66,7 +66,7 @@ int func(int * arr, int m, int n) {
 		return func(arr, p, n);
 	}
 	else{
-		return func(arr,m, p);
+		return func(arr, m, p);
 	}
 }
 

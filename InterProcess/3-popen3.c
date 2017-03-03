@@ -1,4 +1,4 @@
-// Read larger amounts of dara from a pipe
+// Read larger amounts of data from a pipe
 
 #include <unistd.h>
 #include <stdio.h>

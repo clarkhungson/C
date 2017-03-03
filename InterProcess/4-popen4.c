@@ -1,4 +1,4 @@
-// popen Starts a Shell
+// popen Starts a Shell ?
 
 #include <unistd.h>
 #include <stdio.h>
@@ -12,7 +12,7 @@ int main()
 	int chars_read;
 
 	memset(buffer, '\0', sizeof(buffer));
-	read_fp = popen("cat popen*.c | wc -l", "r");
+	read_fp = popen("cat 4-data.txt| wc -l", "r");
 
 	if (read_fp != NULL) {
 		chars_read = fread(buffer, sizeof(char), BUFSIZ, read_fp);

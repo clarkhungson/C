@@ -1,6 +1,6 @@
-// Write and Read to/from a file
+// Write and Read to/from file "2-File2.dat"  using fstream
 
-#include <fstream>
+#include <fstream.h>
 #include <iostream>
 using namespace std;
 
