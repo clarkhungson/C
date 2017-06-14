@@ -9,7 +9,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#define SERVER_ADDRESS "192.168.100.97"
+#define SERVER_ADDRESS "192.168.56.101"
 char webpage[] = 
 "HTTP/1.1 200 OK\r\n"
 "Content-Type: text/html; charset=UTF-8\r\n\r\n"
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 	// Set dia chi cho server
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = inet_addr(SERVER_ADDRESS);
-	server_addr.sin_port = htons(80);
+	server_addr.sin_port = htons(8008);
 
 	// Gan server socket voi dia chi
 	if(bind(fd_server, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)
@@ -68,19 +68,23 @@ int main(int argc, char *argv[])
 	}
 
 	// 
+	int id = 1;
 	while(1)
 	{
+
 		fd_client = accept(fd_server, (struct sockaddr *) &client_addr, &sin_len);
 		if(fd_client == -1)
 		{
 			perror("Connection failed... ");
 			continue;
 		}
+		printf("ID: %d\n", id);
+		sleep(3);
 		printf("Got client connection...\n");
-		if(!fork())
-		{
+		// if(!fork())
+		// {
 			/*child process */
-			close(fd_server);
+			// close(fd_server);
 			memset(buf, 0, 2048);
 			read(fd_client, buf, 2047);
 			printf("%s\n", buf);
@@ -104,12 +108,13 @@ int main(int argc, char *argv[])
 			}
 			else 
 				write(fd_client, webpage, sizeof(webpage) - 1);
-			close(fd_client);
+			// close(fd_client);
 			printf("closing...\n");
 			exit(0);
 
-		}
-		close(fd_client);
+		// }
+		/close(fd_client);
+		id++;
 	}
 
 	return 0;

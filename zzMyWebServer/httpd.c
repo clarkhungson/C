@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
 	// File sockaddr cua server va client
 	struct sockaddr_in server_addr, client_addr;
 	socklen_t sin_len = sizeof(client_addr);
+	
+	// Test map key
 
 	// File descriptor cua server va client
 	int fd_server, fd_client;
